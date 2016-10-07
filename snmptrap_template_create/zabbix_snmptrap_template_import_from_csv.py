@@ -4,16 +4,16 @@ __author__ = 'ahmed'
 
 import csv
 import sys
+import argparse
+import codecs
+import datetime
+import logging
+
+from xml.dom import minidom
 from logging import exception
 from xml.etree import ElementTree
 from xml.etree.ElementTree import Element
 from xml.etree.ElementTree import SubElement
-import datetime
-import logging
-from xml.dom import minidom
-import argparse
-import codecs
-
 
 # dictionary to hold IANA SMI numbers.
 iana_smi_numbers = {
@@ -43,6 +43,7 @@ iana_smi_numbers = {
 }
 
 alarm_list = []
+
 
 def get_smi_number_to_name(oid_string):
     # create a list and remove the empty value as we have `.`
@@ -118,9 +119,9 @@ def generate_template_items_xml(alarm_list, template_name, template_group_name):
     triggers = SubElement(zabbix_export, 'triggers')
     SubElement(zabbix_export, 'graphs')
 
-    #Iterate through the unique list to create XML
+    # Iterate through the unique list to create XML
     for alarm_values in alarm_list:
-       item_creator_type_oid(items, template_name, triggers, alarm_values)
+        item_creator_type_oid(items, template_name, triggers, alarm_values)
 
     for alarm_values in alarm_list:
         item_creator_type_trap_name(items, template_name, triggers, alarm_values)
@@ -139,6 +140,7 @@ def get_trap_name_from_oid(oid_to_search):
             return alarm_dict['name']
 
     return oid_to_search
+
 
 def item_creator_type_oid(items, template_name, triggers, alarm_values):
     item = SubElement(items, 'item')
@@ -182,9 +184,6 @@ def item_creator_type_oid(items, template_name, triggers, alarm_values):
     application_name = SubElement(application, 'name')
     SubElement(item, 'valuemap')
     logtimefmt = SubElement(item, 'logtimefmt')
-
-
-
     #
     # Setting basic information for the item.
     #
@@ -238,13 +237,12 @@ def item_creator_type_oid(items, template_name, triggers, alarm_values):
                                   + template_name + ':' + 'snmptrap["(\\b' + alarm_values['dependency'] + '$\\b)"]' + \
                                   '.str("' + alarm_values['dependency'] + '")}=0'
 
-
     if alarm_values['trigger_name_description'] == '':
         trigger_name.text = 'ATTENTION : On {HOST.NAME}, An Alarm : ' + alarm_values['name'] + \
-                        ' - {#SNMPVALUE}, From Module : ' + alarm_values['mib_module']
+                            ' - {#SNMPVALUE}, From Module : ' + alarm_values['mib_module']
     else:
-        #print alarm_values['trigger_name_description'].replace("\n", " ")
-        #print "---"
+        # print alarm_values['trigger_name_description'].replace("\n", " ")
+        # print "---"
         updated_name = alarm_values['trigger_name_description'].replace("\n", " ")
         trigger_name.text = updated_name
 
@@ -310,8 +308,6 @@ def item_creator_type_trap_name(items, template_name, triggers, alarm_values):
     SubElement(item, 'valuemap')
     logtimefmt = SubElement(item, 'logtimefmt')
 
-
-
     #
     # Setting basic information for the item.
     #
@@ -366,10 +362,9 @@ def item_creator_type_trap_name(items, template_name, triggers, alarm_values):
                                   + template_name + ':' + 'snmptrap["(' + dependency_trap_name + '$)"]' + \
                                   '.str("' + dependency_trap_name + '")}=0'
 
-
     if alarm_values['trigger_name_description'] == '':
         trigger_name.text = 'ATTENTION : On {HOST.NAME}, An Alarm : ' + alarm_values['name'] + \
-                        ' - {#SNMPVALUE}, From Module : ' + alarm_values['mib_module']
+                            ' - {#SNMPVALUE}, From Module : ' + alarm_values['mib_module']
     else:
         updated_name = alarm_values['trigger_name_description'].replace("\n", " ")
         trigger_name.text = updated_name
@@ -450,7 +445,6 @@ def zabbix_snmptrap_template_import(file_name, template_name, template_group_nam
         # Creating list of dictionary to hold the data.
         alarm_list.append(oid_dictionary)
 
-
     # pass on the listed dictionary to xml processor, this will return a XML.
     xml_tree = generate_template_items_xml(alarm_list, template_name, template_group_name)
 
@@ -497,5 +491,5 @@ if __name__ == '__main__':
                   xml_tree_gen_as_string)
 
     print '\n\nFILE PROCESSING COMPLETE.. \nFile is stored in : ' \
-                    + 'templates/' + zabbix_template_name.lower().replace(' ', '-') \
-                    + '-item-template-trigger-import.xml\n'
+          + 'templates/' + zabbix_template_name.lower().replace(' ', '-') \
+          + '-item-template-trigger-import.xml\n'

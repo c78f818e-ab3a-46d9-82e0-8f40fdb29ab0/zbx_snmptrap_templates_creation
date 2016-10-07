@@ -4,3 +4,5 @@
 .idea/misc.xml
 .idea/workspace.xml
 .idea/modules.xml
+snmptrap_template_create/input_csv/p4_test.csv
+snmptrap_template_create/input_csv/p4_test_csv.csv

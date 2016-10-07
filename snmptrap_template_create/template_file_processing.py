@@ -30,16 +30,16 @@ file_processing_list = [{'file_path': 'input_csv/checkpoint_node_traps.csv',
                         {'file_path': 'input_csv/billing_application.csv',
                          'template_name': 'Template SNMP Traps BILLING App Nodes',
                          'template_group': 'Custom Template GT'},
-                        {'file_path': 'input_csv/ams_bru_hkg_ggsn_updated.csv',
-                         'template_name': 'Template SNMP Traps GGSN Nodes',
-                         'template_group': 'Custom Template GT'}]
+                       {'file_path': 'input_csv/roamware_mibv2.csv',
+                        'template_name': 'Template SNMP Traps Roamware Nodes',
+                        'template_group': 'Custom Template Roamware GT'}]
 
-file_processing_list_ggsn = [{'file_path': 'input_csv/ams_bru_hkg_ggsn.csv',
-                         'template_name': 'Template SNMP Traps GGSN Nodes',
-                         'template_group': 'Custom Template GT'}]
+file_processing_list_ggsn = [{'file_path': 'input_csv/roamware_mibv2.csv',
+                        'template_name': 'Template SNMP Traps Roamware Nodes',
+                        'template_group': 'Custom Template Roamware GT'}]
 
 
-for file_to_process in file_processing_list:
+for file_to_process in file_processing_list_ggsn:
     print file_to_process
     xml_tree_gen_as_string = zabbix_snmptrap_template_import_from_csv.zabbix_snmptrap_template_import \
         (file_to_process['file_path'], file_to_process['template_name'],

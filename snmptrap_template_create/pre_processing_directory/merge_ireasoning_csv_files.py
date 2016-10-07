@@ -37,3 +37,6 @@ merge_csv('hges_mibs/', 'merge_csv/hges_merge.csv')
 
 print 'Merging HGES MIBs'
 merge_csv('billing_application/', 'merge_csv/billing_apps_merge.csv')
+
+print 'Merging Roamware MIBs'
+merge_csv('roamware-mibv2/', 'merge_csv/roamware_mibv2.csv')
